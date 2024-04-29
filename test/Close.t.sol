@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
-import {ContractTest} from "./Contract.t.sol";
+
+import { ContractTest } from "./Contract.t.sol";
 
 contract CloseTest is ContractTest {
     function setUp() public {
-         deploy();
-         create_pool();
-         pool_buy();
+        deploy();
+        create_pool();
+        pool_buy();
     }
 
     function test_close() public {

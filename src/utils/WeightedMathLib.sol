@@ -30,7 +30,7 @@ library WeightedMathLib {
     /// -----------------------------------------------------------------------
 
     /// @dev Maximum relative error allowed for fixed-point math operations (10^(-14)).
-    uint256 internal constant MAX_POW_RELATIVE_ERROR = 10000;
+    uint256 internal constant MAX_POW_RELATIVE_ERROR = 10_000;
 
     /// @dev Maximum percentage of reserveIn allowed to be swapped in when using `getAmountOut` (30%).
     uint256 internal constant MAX_PERCENTAGE_IN = 0.3 ether;
@@ -52,7 +52,11 @@ library WeightedMathLib {
         uint256 reserveOut,
         uint256 weightIn,
         uint256 weightOut
-    ) internal pure returns (uint256) {
+    )
+        internal
+        pure
+        returns (uint256)
+    {
         // -----------------------------------------------------------------------
         // (reserveIn / weightIn) / (reserveOut / weightOut)
         // -----------------------------------------------------------------------
@@ -63,7 +67,10 @@ library WeightedMathLib {
     /// @notice Calculate the invariant of a weighted pool given reserves and weights of the assets.
     /// @param reserves An array of reserves for all the assets in the pool.
     /// @param weights An array of weights for all the assets in the pool.
-    function getInvariant(uint256[] memory reserves, uint256[] memory weights)
+    function getInvariant(
+        uint256[] memory reserves,
+        uint256[] memory weights
+    )
         internal
         pure
         returns (uint256 invariant)
@@ -95,7 +102,11 @@ library WeightedMathLib {
         uint256 reserveOut,
         uint256 weightIn,
         uint256 weightOut
-    ) internal pure returns (uint256 invariant) {
+    )
+        internal
+        pure
+        returns (uint256 invariant)
+    {
         // -----------------------------------------------------------------------
         //   ____
         //   ⎟⎟          weight
@@ -118,7 +129,11 @@ library WeightedMathLib {
         uint256 reserveOut,
         uint256 weightIn,
         uint256 weightOut
-    ) internal pure returns (uint256) {
+    )
+        internal
+        pure
+        returns (uint256)
+    {
         unchecked {
             // -----------------------------------------------------------------------
             //
@@ -137,9 +152,7 @@ library WeightedMathLib {
 
             // `MAX_PERCENTAGE_OUT` check ensures `amountOut` is always less than `reserveOut`.
             return reserveIn.mulWadUp(
-                powWadUp(
-                    reserveOut.divWadUp(reserveOut.rawSub(amountOut)), weightOut.divWadUp(weightIn)
-                ) - 1 ether
+                powWadUp(reserveOut.divWadUp(reserveOut.rawSub(amountOut)), weightOut.divWadUp(weightIn)) - 1 ether
             );
         }
     }
@@ -156,7 +169,11 @@ library WeightedMathLib {
         uint256 reserveOut,
         uint256 weightIn,
         uint256 weightOut
-    ) internal pure returns (uint256) {
+    )
+        internal
+        pure
+        returns (uint256)
+    {
         // -----------------------------------------------------------------------
         //
         //             ⎛                          ⎛weightIn ⎞⎞
@@ -173,17 +190,11 @@ library WeightedMathLib {
         }
 
         return reserveOut.mulWad(
-            uint256(1e18).rawSub(
-                powWadUp(reserveIn.divWadUp(reserveIn + amountIn), weightIn.divWad(weightOut))
-            )
+            uint256(1e18).rawSub(powWadUp(reserveIn.divWadUp(reserveIn + amountIn), weightIn.divWad(weightOut)))
         );
     }
 
-    function linearInterpolation(uint256 x, uint256 y, uint256 i, uint256 n)
-        internal
-        pure
-        returns (uint256)
-    {
+    function linearInterpolation(uint256 x, uint256 y, uint256 i, uint256 n) internal pure returns (uint256) {
         // -----------------------------------------------------------------------
         //
         //         ⎛ |x - y| ⎞
@@ -191,9 +202,7 @@ library WeightedMathLib {
         //         ⎝    n    ⎠
         // -----------------------------------------------------------------------
 
-        return x > y
-            ? x.rawSub(x.rawSub(y).mulDiv(i.min(n), n))
-            : x.rawAdd(y.rawSub(x).mulDiv(i.min(n), n));
+        return x > y ? x.rawSub(x.rawSub(y).mulDiv(i.min(n), n)) : x.rawAdd(y.rawSub(x).mulDiv(i.min(n), n));
     }
 
     /// -----------------------------------------------------------------------

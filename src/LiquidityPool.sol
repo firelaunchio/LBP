@@ -348,9 +348,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
         virtual
         returns (uint256 sharesOut)
     {
-        return swapExactAssetsForShares(
-            assetsIn, minSharesOut, recipient, address(0), MerkleProofLib.emptyProof()
-        );
+        return swapExactAssetsForShares(assetsIn, minSharesOut, recipient, address(0), MerkleProofLib.emptyProof());
     }
 
     /// @notice Swap a specific number of shares for a maximum amount of assets.
@@ -369,9 +367,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
         virtual
         returns (uint256 assetsIn)
     {
-        return swapAssetsForExactShares(
-            sharesOut, maxAssetsIn, recipient, address(0), MerkleProofLib.emptyProof()
-        );
+        return swapAssetsForExactShares(sharesOut, maxAssetsIn, recipient, address(0), MerkleProofLib.emptyProof());
     }
 
     /// @notice Swap a specific amount of assets for a minimum number of shares with a referrer.
@@ -393,9 +389,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
         virtual
         returns (uint256 sharesOut)
     {
-        return swapExactAssetsForShares(
-            assetsIn, minSharesOut, recipient, referrer, MerkleProofLib.emptyProof()
-        );
+        return swapExactAssetsForShares(assetsIn, minSharesOut, recipient, referrer, MerkleProofLib.emptyProof());
     }
 
     /// @notice Swap a specific number of shares for a maximum amount of assets with a referrer.
@@ -417,9 +411,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
         virtual
         returns (uint256 assetsIn)
     {
-        return swapAssetsForExactShares(
-            sharesOut, maxAssetsIn, recipient, referrer, MerkleProofLib.emptyProof()
-        );
+        return swapAssetsForExactShares(sharesOut, maxAssetsIn, recipient, referrer, MerkleProofLib.emptyProof());
     }
 
     /// @notice Swap a specific amount of assets for a minimum number of shares with a referrer and Merkle proof.
@@ -456,9 +448,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
 
         if (sharesOut < minSharesOut) revert SlippageExceeded();
 
-        _swapAssetsForShares(
-            recipient, referrer, assetsIn, sharesOut, pool.assets, pool.shares, swapFees
-        );
+        _swapAssetsForShares(recipient, referrer, assetsIn, sharesOut, pool.assets, pool.shares, swapFees);
     }
 
     /// @notice Swap a specific number of shares for a maximum amount of assets with a referrer and Merkle proof.
@@ -495,9 +485,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
 
         if (assetsIn > maxAssetsIn) revert SlippageExceeded();
 
-        _swapAssetsForShares(
-            recipient, referrer, assetsIn, sharesOut, pool.assets, pool.shares, swapFees
-        );
+        _swapAssetsForShares(recipient, referrer, assetsIn, sharesOut, pool.assets, pool.shares, swapFees);
     }
 
     function _swapAssetsForShares(
@@ -559,8 +547,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
         virtual
         returns (uint256 assetsOut)
     {
-        return
-            swapExactSharesForAssets(sharesIn, minAssetsOut, recipient, MerkleProofLib.emptyProof());
+        return swapExactSharesForAssets(sharesIn, minAssetsOut, recipient, MerkleProofLib.emptyProof());
     }
 
     /// @notice Swap a specific number of shares for a maximum amount of assets.
@@ -579,8 +566,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
         virtual
         returns (uint256 sharesIn)
     {
-        return
-            swapSharesForExactAssets(assetsOut, maxSharesIn, recipient, MerkleProofLib.emptyProof());
+        return swapSharesForExactAssets(assetsOut, maxSharesIn, recipient, MerkleProofLib.emptyProof());
     }
 
     /// @notice Swap a specific number of shares for a minimum amount of assets.
@@ -703,9 +689,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
             // Transfer and distribute fees
             asset().safeTransfer(platform(), platformFees + totalSwapFeesAsset);
             share().safeTransfer(platform(), totalSwapFeesShare);
-            Treasury(platform()).distributeFee(
-                asset(), platformFees, totalSwapFeesAsset, share(), totalSwapFeesShare
-            );
+            Treasury(platform()).distributeFee(asset(), platformFees, totalSwapFeesAsset, share(), totalSwapFeesShare);
 
             // Transfer asset
             asset().safeTransfer(manager(), totalAssetsMinusFees);
@@ -754,8 +738,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
             params.totalAmount = uint128(shares);
             params.asset = IERC20(share());
             params.cancelable = false;
-            params.range =
-                LockupLinear.Range({ start: uint40(saleEnd()), cliff: vestCliff(), end: vestEnd() });
+            params.range = LockupLinear.Range({ start: uint40(saleEnd()), cliff: vestCliff(), end: vestEnd() });
             params.broker = Broker(address(0), 0);
 
             streamID = SABLIER.createWithRange(params);
@@ -833,12 +816,7 @@ contract LiquidityPool is Pausable, Clone, ReentrancyGuard {
         external
         view
         virtual
-        returns (
-            uint256 assetReserve,
-            uint256 shareReserve,
-            uint256 assetWeight,
-            uint256 shareWeight
-        )
+        returns (uint256 assetReserve, uint256 shareReserve, uint256 assetWeight, uint256 shareWeight)
     {
         return args().computeReservesAndWeights();
     }

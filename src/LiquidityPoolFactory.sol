@@ -34,7 +34,6 @@ struct FactorySettings {
 uint256 constant MAX_FEE_BIPS = 0.1e4;
 
 contract LiquidityPoolFactory is Ownable {
-
     using LibClone for address;
 
     using SafeTransferLib for address;
@@ -163,10 +162,7 @@ contract LiquidityPoolFactory is Ownable {
         }
 
         // Check timestamps to ensure the sale will not immediately end.
-        if (
-            uint40(block.timestamp + 1 days) > args.saleEnd
-                || args.saleEnd - args.saleStart < uint40(1 days)
-        ) {
+        if (uint40(block.timestamp + 1 days) > args.saleEnd || args.saleEnd - args.saleStart < uint40(1 days)) {
             revert SalePeriodLow();
         }
 
@@ -182,8 +178,8 @@ contract LiquidityPoolFactory is Ownable {
         }
 
         if (
-            args.weightStart < 0.01 ether || args.weightStart > 0.99 ether
-                || args.weightEnd > 0.99 ether || args.weightEnd < 0.01 ether
+            args.weightStart < 0.01 ether || args.weightStart > 0.99 ether || args.weightEnd > 0.99 ether
+                || args.weightEnd < 0.01 ether
         ) {
             revert InvalidWeightConfig();
         }
@@ -284,29 +280,17 @@ contract LiquidityPoolFactory is Ownable {
         virtual
         returns (address)
     {
-        return implementation.predictDeterministicAddress(
-            _encodeImmutableArgs(args), salt, address(this)
-        );
+        return implementation.predictDeterministicAddress(_encodeImmutableArgs(args), salt, address(this));
     }
 
     /// @notice Predicts the init code hash for a Liquidity Bootstrap Pool.
     /// @param args The PoolSettings struct containing pool-specific parameters.
     /// @return The init code hash of the pool.
-    function predictInitCodeHash(PoolSettings memory args)
-        external
-        view
-        virtual
-        returns (bytes32)
-    {
+    function predictInitCodeHash(PoolSettings memory args) external view virtual returns (bytes32) {
         return implementation.initCodeHash(_encodeImmutableArgs(args));
     }
 
-    function _encodeImmutableArgs(PoolSettings memory args)
-        internal
-        view
-        virtual
-        returns (bytes memory)
-    {
+    function _encodeImmutableArgs(PoolSettings memory args) internal view virtual returns (bytes memory) {
         FactorySettings memory settings = factorySettings;
         unchecked {
             return abi.encodePacked(

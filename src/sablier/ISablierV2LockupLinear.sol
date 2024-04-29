@@ -7,7 +7,7 @@ import { Lockup, LockupLinear } from "./DataTypes.sol";
 
 /// @title ISablierV2LockupLinear
 /// @notice Creates and manages lockup streams with a linear streaming function.
-interface ISablierV2LockupLinear  {
+interface ISablierV2LockupLinear {
     /*//////////////////////////////////////////////////////////////////////////
                                        EVENTS
     //////////////////////////////////////////////////////////////////////////*/
@@ -97,25 +97,25 @@ interface ISablierV2LockupLinear  {
         external
         returns (uint256 streamId);
 
-        /// @notice Creates a stream with the provided start time and end time as the range. The stream is
-        /// funded by `msg.sender` and is wrapped in an ERC-721 NFT.
-        ///
-        /// @dev Emits a {Transfer} and {CreateLockupLinearStream} event.
-        ///
-        /// Notes:
-        /// - As long as the times are ordered, it is not an error for the start or the cliff time to be in the past.
-        ///
-        /// Requirements:
-        /// - Must not be delegate called.
-        /// - `params.totalAmount` must be greater than zero.
-        /// - If set, `params.broker.fee` must not be greater than `MAX_FEE`.
-        /// - `params.range.start` must be less than or equal to `params.range.cliff`.
-        /// - `params.range.cliff` must be less than `params.range.end`.
-        /// - `params.range.end` must be in the future.
-        /// - `params.recipient` must not be the zero address.
-        /// - `msg.sender` must have allowed this contract to spend at least `params.totalAmount` assets.
-        ///
-        /// @param params Struct encapsulating the function parameters, which are documented in {DataTypes}.
-        /// @return streamId The id of the newly created stream.
-        function createWithRange(LockupLinear.CreateWithRange calldata params) external returns (uint256 streamId);
-    }
+    /// @notice Creates a stream with the provided start time and end time as the range. The stream is
+    /// funded by `msg.sender` and is wrapped in an ERC-721 NFT.
+    ///
+    /// @dev Emits a {Transfer} and {CreateLockupLinearStream} event.
+    ///
+    /// Notes:
+    /// - As long as the times are ordered, it is not an error for the start or the cliff time to be in the past.
+    ///
+    /// Requirements:
+    /// - Must not be delegate called.
+    /// - `params.totalAmount` must be greater than zero.
+    /// - If set, `params.broker.fee` must not be greater than `MAX_FEE`.
+    /// - `params.range.start` must be less than or equal to `params.range.cliff`.
+    /// - `params.range.cliff` must be less than `params.range.end`.
+    /// - `params.range.end` must be in the future.
+    /// - `params.recipient` must not be the zero address.
+    /// - `msg.sender` must have allowed this contract to spend at least `params.totalAmount` assets.
+    ///
+    /// @param params Struct encapsulating the function parameters, which are documented in {DataTypes}.
+    /// @return streamId The id of the newly created stream.
+    function createWithRange(LockupLinear.CreateWithRange calldata params) external returns (uint256 streamId);
+}

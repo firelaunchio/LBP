@@ -69,13 +69,7 @@ contract Treasury is Ownable {
      * @notice Update fee recipients and percentages.
      * @param _recipients List of addresses to be added as fee recipients.
      */
-    function updateRecipients(
-        address[] calldata _recipients,
-        uint256[] calldata _percentages
-    )
-        public
-        onlyOwner
-    {
+    function updateRecipients(address[] calldata _recipients, uint256[] calldata _percentages) public onlyOwner {
         if (_recipients.length != _percentages.length) revert InvalidInput();
 
         delete recipients;

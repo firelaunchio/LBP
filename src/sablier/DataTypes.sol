@@ -48,10 +48,9 @@ library Lockup {
         SETTLED, // value 2
         CANCELED, // value 3
         DEPLETED // value 4
+
     }
 }
-
-
 
 /// @notice Namespace for the structs used in {SablierV2LockupLinear}.
 library LockupLinear {
@@ -100,6 +99,7 @@ library LockupLinear {
     /// @notice Struct encapsulating the cliff duration and the total duration.
     /// @param cliff The cliff duration in seconds.
     /// @param total The total duration in seconds.
+
     struct Durations {
         uint40 cliff;
         uint40 total;

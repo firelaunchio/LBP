@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
-import {console} from "forge-std/Test.sol";
-import {ContractTest} from "./Contract.t.sol";
+
+import { console } from "forge-std/Test.sol";
+import { ContractTest } from "./Contract.t.sol";
 
 contract RedeemTest is ContractTest {
     function setUp() public {
-         deploy();
-         create_pool();
-         pool_buy();
-         pool_close();
+        deploy();
+        create_pool();
+        pool_buy();
+        pool_close();
     }
 
     function test_redeem() public {

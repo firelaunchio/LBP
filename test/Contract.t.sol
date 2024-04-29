@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
-import {Test} from "forge-std/Test.sol";
-import {LiquidityPool} from "../src/LiquidityPool.sol";
-import {LiquidityPoolFactory, PoolSettings} from "../src/LiquidityPoolFactory.sol";
-import {Treasury} from "../src/Treasury.sol";
-import {Moon} from "./utils/Moon.sol";
+import { Test } from "forge-std/Test.sol";
+import { LiquidityPool } from "../src/LiquidityPool.sol";
+import { LiquidityPoolFactory, PoolSettings } from "../src/LiquidityPoolFactory.sol";
+import { Treasury } from "../src/Treasury.sol";
+import { Moon } from "./utils/Moon.sol";
 
 contract ContractTest is Test {
     LiquidityPool public pool;
@@ -21,7 +21,7 @@ contract ContractTest is Test {
     address public other = address(0xFF);
     address internal sablier = address(0xd4300c5bC0B9e27c73eBAbDc747ba990B1B570Db);
 
-    uint256 blockTime = 1714521600; // 2024-05-01 00:00:00
+    uint256 blockTime = 1_714_521_600; // 2024-05-01 00:00:00
 
     function deploy() public {
         usdt = new Moon("usdt coin", "USDT");
@@ -34,11 +34,11 @@ contract ContractTest is Test {
     }
 
     function create_pool() internal {
-        uint256 assets = 10000e18;
-        uint256 shares = 10000e18;
+        uint256 assets = 10_000e18;
+        uint256 shares = 10_000e18;
 
-        uint40 saleStart = uint40(blockTime) + 86400;
-        uint40 saleEnd = saleStart + 86400 * 3;
+        uint40 saleStart = uint40(blockTime) + 86_400;
+        uint40 saleEnd = saleStart + 86_400 * 3;
         pool = LiquidityPool(create_pool(saleStart, saleEnd, assets, shares));
     }
 
@@ -64,7 +64,15 @@ contract ContractTest is Test {
         vm.stopPrank();
     }
 
-    function create_pool(uint40 saleStart, uint40 saleEnd, uint256 assets, uint256 shares) internal returns (address iPool) {
+    function create_pool(
+        uint40 saleStart,
+        uint40 saleEnd,
+        uint256 assets,
+        uint256 shares
+    )
+        internal
+        returns (address iPool)
+    {
         vm.startPrank(create);
 
         usdt.mint(create, assets);
@@ -74,26 +82,25 @@ contract ContractTest is Test {
         pepe.approve(address(factory), shares);
 
         PoolSettings memory args = PoolSettings({
-          asset: address(usdt),
-          share: address(pepe),
-          creator: create,
-          virtualAssets: 0,
-          virtualShares: 0,
-          maxSharePrice: 309485009821345068724781055,
-          maxSharesOut: 309485009821345068724781055,
-          maxAssetsIn: 309485009821345068724781055,
-          weightStart: 1e16,
-          weightEnd: 60e16,
-          saleStart: saleStart,
-          saleEnd: saleEnd,
-          vestCliff: 0,
-          vestEnd: 0,
-          sellingAllowed: true,
-          whitelistMerkleRoot: 0
+            asset: address(usdt),
+            share: address(pepe),
+            creator: create,
+            virtualAssets: 0,
+            virtualShares: 0,
+            maxSharePrice: 309_485_009_821_345_068_724_781_055,
+            maxSharesOut: 309_485_009_821_345_068_724_781_055,
+            maxAssetsIn: 309_485_009_821_345_068_724_781_055,
+            weightStart: 1e16,
+            weightEnd: 60e16,
+            saleStart: saleStart,
+            saleEnd: saleEnd,
+            vestCliff: 0,
+            vestEnd: 0,
+            sellingAllowed: true,
+            whitelistMerkleRoot: 0
         });
 
         iPool = factory.createLiquidityPool(args, assets, shares, "0");
         vm.stopPrank();
     }
-
 }

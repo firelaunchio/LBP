@@ -1,16 +1,17 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
-import {console} from "forge-std/Test.sol";
-import {ContractTest} from "./Contract.t.sol";
+
+import { console } from "forge-std/Test.sol";
+import { ContractTest } from "./Contract.t.sol";
 
 contract BuyTest is ContractTest {
     function setUp() public {
-         deploy();
-         create_pool();
+        deploy();
+        create_pool();
     }
 
     function test_buy() public {
-          pool_buy();
+        pool_buy();
     }
 
     function testFail_swapDisallowedStart() public {
@@ -21,7 +22,7 @@ contract BuyTest is ContractTest {
         usdt.approve(address(pool), assetsIn);
 
         uint256 minSharesOut = pool.previewSharesOut(assetsIn);
-        pool.swapExactAssetsForShares(assetsIn,  minSharesOut, user);
+        pool.swapExactAssetsForShares(assetsIn, minSharesOut, user);
         vm.stopPrank();
     }
 
@@ -33,7 +34,7 @@ contract BuyTest is ContractTest {
         usdt.approve(address(pool), assetsIn);
 
         uint256 minSharesOut = pool.previewSharesOut(assetsIn);
-        pool.swapExactAssetsForShares(assetsIn,  minSharesOut, user);
+        pool.swapExactAssetsForShares(assetsIn, minSharesOut, user);
         vm.stopPrank();
     }
 
@@ -49,7 +50,7 @@ contract BuyTest is ContractTest {
         usdt.approve(address(pool), assetsIn);
 
         uint256 minSharesOut = pool.previewSharesOut(assetsIn);
-        uint256 sharesOut = pool.swapExactAssetsForShares(assetsIn,  minSharesOut, user);
+        uint256 sharesOut = pool.swapExactAssetsForShares(assetsIn, minSharesOut, user);
         uint256 afterBalanceOf = pepe.balanceOf(user);
         uint256 afterShares = pool.purchasedShares(user);
         vm.stopPrank();

@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
-import {console} from "forge-std/Test.sol";
-import {ContractTest} from "./Contract.t.sol";
+
+import { console } from "forge-std/Test.sol";
+import { ContractTest } from "./Contract.t.sol";
 
 contract SellTest is ContractTest {
     function setUp() public {
-         deploy();
-         create_pool();
-         pool_buy();
+        deploy();
+        create_pool();
+        pool_buy();
     }
 
     function test_swapExactSharesForAssets() public {
@@ -27,7 +28,7 @@ contract SellTest is ContractTest {
         console.log("beforeShares:%d", beforeShares);
         console.log("afterShares:%d", afterShares);
         console.log("assetsOut:%d", assetsOut);
-        assertEq(beforeBalanceOf +  assetsOut, afterBalanceOf);
+        assertEq(beforeBalanceOf + assetsOut, afterBalanceOf);
         assertEq(beforeShares, afterShares + sharesIn);
     }
 
@@ -48,7 +49,7 @@ contract SellTest is ContractTest {
         console.log("beforeShares:%d", beforeShares);
         console.log("afterShares:%d", afterShares);
         console.log("assetsOut:%d", assetsOut);
-        assertEq(beforeBalanceOf +  assetsOut, afterBalanceOf);
+        assertEq(beforeBalanceOf + assetsOut, afterBalanceOf);
         assertEq(beforeShares, afterShares + sharesIn);
     }
 
@@ -70,8 +71,7 @@ contract SellTest is ContractTest {
         console.log("beforeShares:%d", beforeShares);
         console.log("afterShares:%d", afterShares);
         console.log("assetsOut:%d", assetsOut);
-        assertEq(beforeBalanceOf +  assetsOut, afterBalanceOf);
+        assertEq(beforeBalanceOf + assetsOut, afterBalanceOf);
         assertEq(beforeShares, afterShares + sharesIn);
     }
-
 }

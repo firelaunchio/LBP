@@ -36,12 +36,7 @@ library LiquidityLib {
     function computeReservesAndWeights(Pool memory args)
         internal
         view
-        returns (
-            uint256 assetReserve,
-            uint256 shareReserve,
-            uint256 assetWeight,
-            uint256 shareWeight
-        )
+        returns (uint256 assetReserve, uint256 shareReserve, uint256 assetWeight, uint256 shareWeight)
     {
         assetReserve = args.assets + args.virtualAssets;
 
@@ -64,24 +59,14 @@ library LiquidityLib {
         shareWeight = uint256(1e18).rawSub(assetWeight);
     }
 
-    function getPrice(
-        Pool memory args,
-        uint256 sharesOut
-    )
-        internal
-        view
-        returns (uint256 price)
-    {
+    function getPrice(Pool memory args, uint256 sharesOut) internal view returns (uint256 price) {
         (uint256 assetReserve, uint256 shareReserve, uint256 assetWeight, uint256 shareWeight) =
             computeReservesAndWeights(args);
 
-        (uint256 assetReserveScaled, uint256 shareReserveScaled) =
-            scaledReserves(args, assetReserve, shareReserve);
+        (uint256 assetReserveScaled, uint256 shareReserveScaled) = scaledReserves(args, assetReserve, shareReserve);
         uint256 sharesOutScaled = scaleTokenBefore(sharesOut, args.shareDecimals);
 
-        uint256 assetsIn = sharesOutScaled.getAmountIn(
-            assetReserveScaled, shareReserveScaled, assetWeight, shareWeight
-        );
+        uint256 assetsIn = sharesOutScaled.getAmountIn(assetReserveScaled, shareReserveScaled, assetWeight, shareWeight);
 
         price = assetsIn.divWad(sharesOutScaled);
         if (price > args.maxSharePrice) {
@@ -89,24 +74,14 @@ library LiquidityLib {
         }
     }
 
-    function previewAssetsIn(
-        Pool memory args,
-        uint256 sharesOut
-    )
-        internal
-        view
-        returns (uint256 assetsIn)
-    {
+    function previewAssetsIn(Pool memory args, uint256 sharesOut) internal view returns (uint256 assetsIn) {
         (uint256 assetReserve, uint256 shareReserve, uint256 assetWeight, uint256 shareWeight) =
             computeReservesAndWeights(args);
 
-        (uint256 assetReserveScaled, uint256 shareReserveScaled) =
-            scaledReserves(args, assetReserve, shareReserve);
+        (uint256 assetReserveScaled, uint256 shareReserveScaled) = scaledReserves(args, assetReserve, shareReserve);
         uint256 sharesOutScaled = scaleTokenBefore(sharesOut, args.shareDecimals);
 
-        assetsIn = sharesOutScaled.getAmountIn(
-            assetReserveScaled, shareReserveScaled, assetWeight, shareWeight
-        );
+        assetsIn = sharesOutScaled.getAmountIn(assetReserveScaled, shareReserveScaled, assetWeight, shareWeight);
 
         if (assetsIn.divWad(sharesOutScaled) > args.maxSharePrice) {
             assetsIn = sharesOutScaled.divWad(args.maxSharePrice);
@@ -115,24 +90,14 @@ library LiquidityLib {
         assetsIn = scaleTokenAfter(assetsIn, args.assetDecimals);
     }
 
-    function previewSharesOut(
-        Pool memory args,
-        uint256 assetsIn
-    )
-        internal
-        view
-        returns (uint256 sharesOut)
-    {
+    function previewSharesOut(Pool memory args, uint256 assetsIn) internal view returns (uint256 sharesOut) {
         (uint256 assetReserve, uint256 shareReserve, uint256 assetWeight, uint256 shareWeight) =
             computeReservesAndWeights(args);
 
-        (uint256 assetReserveScaled, uint256 shareReserveScaled) =
-            scaledReserves(args, assetReserve, shareReserve);
+        (uint256 assetReserveScaled, uint256 shareReserveScaled) = scaledReserves(args, assetReserve, shareReserve);
         uint256 assetsInScaled = scaleTokenBefore(assetsIn, args.assetDecimals);
 
-        sharesOut = assetsInScaled.getAmountOut(
-            assetReserveScaled, shareReserveScaled, assetWeight, shareWeight
-        );
+        sharesOut = assetsInScaled.getAmountOut(assetReserveScaled, shareReserveScaled, assetWeight, shareWeight);
 
         if (assetsInScaled.divWad(sharesOut) > args.maxSharePrice) {
             sharesOut = assetsInScaled.mulWad(args.maxSharePrice);
@@ -141,24 +106,14 @@ library LiquidityLib {
         sharesOut = scaleTokenAfter(sharesOut, args.shareDecimals);
     }
 
-    function previewSharesIn(
-        Pool memory args,
-        uint256 assetsOut
-    )
-        internal
-        view
-        returns (uint256 sharesIn)
-    {
+    function previewSharesIn(Pool memory args, uint256 assetsOut) internal view returns (uint256 sharesIn) {
         (uint256 assetReserve, uint256 shareReserve, uint256 assetWeight, uint256 shareWeight) =
             computeReservesAndWeights(args);
 
-        (uint256 assetReserveScaled, uint256 shareReserveScaled) =
-            scaledReserves(args, assetReserve, shareReserve);
+        (uint256 assetReserveScaled, uint256 shareReserveScaled) = scaledReserves(args, assetReserve, shareReserve);
         uint256 assetsOutScaled = scaleTokenBefore(assetsOut, args.assetDecimals);
 
-        sharesIn = assetsOutScaled.getAmountIn(
-            shareReserveScaled, assetReserveScaled, shareWeight, assetWeight
-        );
+        sharesIn = assetsOutScaled.getAmountIn(shareReserveScaled, assetReserveScaled, shareWeight, assetWeight);
 
         if (assetsOutScaled.divWad(sharesIn) > args.maxSharePrice) {
             sharesIn = assetsOutScaled.divWad(args.maxSharePrice);
@@ -167,24 +122,14 @@ library LiquidityLib {
         sharesIn = scaleTokenAfter(sharesIn, args.shareDecimals);
     }
 
-    function previewAssetsOut(
-        Pool memory args,
-        uint256 sharesIn
-    )
-        internal
-        view
-        returns (uint256 assetsOut)
-    {
+    function previewAssetsOut(Pool memory args, uint256 sharesIn) internal view returns (uint256 assetsOut) {
         (uint256 assetReserve, uint256 shareReserve, uint256 assetWeight, uint256 shareWeight) =
             computeReservesAndWeights(args);
 
-        (uint256 assetReserveScaled, uint256 shareReserveScaled) =
-            scaledReserves(args, assetReserve, shareReserve);
+        (uint256 assetReserveScaled, uint256 shareReserveScaled) = scaledReserves(args, assetReserve, shareReserve);
         uint256 sharesInScaled = scaleTokenBefore(sharesIn, args.shareDecimals);
 
-        assetsOut = sharesInScaled.getAmountOut(
-            shareReserveScaled, assetReserveScaled, shareWeight, assetWeight
-        );
+        assetsOut = sharesInScaled.getAmountOut(shareReserveScaled, assetReserveScaled, shareWeight, assetWeight);
 
         if (assetsOut.divWad(sharesInScaled) > args.maxSharePrice) {
             assetsOut = sharesInScaled.mulWad(args.maxSharePrice);
@@ -202,18 +147,10 @@ library LiquidityLib {
         pure
         returns (uint256, uint256)
     {
-        return
-            (scaleTokenBefore(assetReserve, args.assetDecimals), scaleTokenBefore(shareReserve, args.shareDecimals));
+        return (scaleTokenBefore(assetReserve, args.assetDecimals), scaleTokenBefore(shareReserve, args.shareDecimals));
     }
 
-    function scaleTokenBefore(
-        uint256 amount,
-        uint8 decimals
-    )
-        internal
-        pure
-        returns (uint256 scaledAmount)
-    {
+    function scaleTokenBefore(uint256 amount, uint8 decimals) internal pure returns (uint256 scaledAmount) {
         scaledAmount = amount;
 
         if (decimals < 18) {
@@ -225,14 +162,7 @@ library LiquidityLib {
         }
     }
 
-    function scaleTokenAfter(
-        uint256 amount,
-        uint8 decimals
-    )
-        internal
-        pure
-        returns (uint256 scaledAmount)
-    {
+    function scaleTokenAfter(uint256 amount, uint8 decimals) internal pure returns (uint256 scaledAmount) {
         scaledAmount = amount;
 
         if (decimals < 18) {
