@@ -7,4 +7,5 @@ forge test
 
 # Gas Fee
 forge snapshot
+
 cat .gas-snapshot
