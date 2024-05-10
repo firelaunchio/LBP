@@ -14,6 +14,37 @@ contract CloseTest is ContractTest {
         pool_close();
     }
 
+    function test_closeShares() public {
+        vm.warp(pool.saleEnd());
+
+        uint256 beforeBalanceOf = pepe.balanceOf(create);
+        uint256 shares = pepe.balanceOf(address(pool)) - pool.totalPurchased() - pool.totalSwapFeesShare();
+
+        pool.close();
+        uint256 afterBalanceOf = pepe.balanceOf(create);
+        assertEq(beforeBalanceOf + shares, afterBalanceOf);
+
+        uint256 poolBalanceOf = pepe.balanceOf(address(pool));
+        assertEq(pool.totalPurchased(), poolBalanceOf);
+    }
+
+    function test_closeAssets() public {
+        vm.warp(pool.saleEnd());
+
+        uint256 beforeBalanceOf = usdt.balanceOf(create);
+
+        uint256 totalAssets = usdt.balanceOf(address(pool)) - pool.totalSwapFeesAsset();
+        uint256 platformFees = totalAssets * pool.platformFee() / 1e18;
+        uint256 totalAssetsMinusFees = totalAssets - platformFees;
+
+        pool.close();
+        uint256 afterBalanceOf = usdt.balanceOf(create);
+        assertEq(beforeBalanceOf + totalAssetsMinusFees, afterBalanceOf);
+
+        uint256 poolBalanceOf = usdt.balanceOf(address(pool));
+        assertEq(0, poolBalanceOf);
+    }
+
     function testFail_closeTime() public {
         pool.close();
     }
